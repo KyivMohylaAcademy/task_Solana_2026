@@ -1,0 +1,25 @@
+# Anchor / Solana
+.anchor
+test-ledger
+
+# Rust
+target
+**/*.rs.bk
+
+# Node
+node_modules
+yarn.lock
+
+# OS
+.DS_Store
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Keys (never commit private keys)
+programs/*/keypair.json
+*.json.bak
+/tmp-*.json
