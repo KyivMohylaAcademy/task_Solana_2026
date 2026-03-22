@@ -182,6 +182,19 @@ pub struct ItemMetadata {
 
 ---
 
+## Deployed Programs (Devnet)
+
+| Програма | Program ID | Explorer |
+|----------|-----------|----------|
+| resource_manager | `CScUCDipS5gMCz7uMD4bqpjCt2NXLhJHoBWiXPKj2bEc` | [Solana Explorer](https://explorer.solana.com/address/CScUCDipS5gMCz7uMD4bqpjCt2NXLhJHoBWiXPKj2bEc?cluster=devnet) |
+| magic_token | `3LgzDM2mxShb8Bzp5JFLfboz6KXDMeQKtNwRW7Zf4aqd` | [Solana Explorer](https://explorer.solana.com/address/3LgzDM2mxShb8Bzp5JFLfboz6KXDMeQKtNwRW7Zf4aqd?cluster=devnet) |
+| item_nft | `3kSdBAJ6jmN6bdXR14u5LWTP98EcaSYbEi1AmZJbpTdp` | [Solana Explorer](https://explorer.solana.com/address/3kSdBAJ6jmN6bdXR14u5LWTP98EcaSYbEi1AmZJbpTdp?cluster=devnet) |
+| search | `7LYMjRTUz35XejuLKhawzxVej3saRJ6kHCq6d6kWjeDz` | [Solana Explorer](https://explorer.solana.com/address/7LYMjRTUz35XejuLKhawzxVej3saRJ6kHCq6d6kWjeDz?cluster=devnet) |
+| crafting | `DmciAbQkk3a26UE8USvCi1VwZRs4DjXxNszqfo3nNYvv` | [Solana Explorer](https://explorer.solana.com/address/DmciAbQkk3a26UE8USvCi1VwZRs4DjXxNszqfo3nNYvv?cluster=devnet) |
+| marketplace | `GvoJJmQiBXdLQrzP33uhiyQWxBPo254qp8iuotXR9Eeu` | [Solana Explorer](https://explorer.solana.com/address/GvoJJmQiBXdLQrzP33uhiyQWxBPo254qp8iuotXR9Eeu?cluster=devnet) |
+
+---
+
 ## Корисні ресурси
 
 - [Anchor Documentation](https://www.anchor-lang.com/)
