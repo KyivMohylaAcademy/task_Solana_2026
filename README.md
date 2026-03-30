@@ -3,11 +3,11 @@
 Виконав студент Джос Олексій
 Результат деплою можна знайти в utils/account.json
 
-Навчальний проєкт на Anchor 0.32.1 з шістьма програмами:
+Навчальний проєкт на актуальній Anchor 0.32.1 з шістьма програмами:
 resource_manager, item_nft, crafting, search, marketplace, magic_token
 
-Поточний flow:
-search -> craft -> redeem
+Поточний flow: search -> craft -> redeem
+
 Гравець шукає ресурси, крафтить NFT-предмет і обмінює його на reward token
 
 ## Program IDs
