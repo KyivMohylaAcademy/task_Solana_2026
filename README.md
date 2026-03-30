@@ -57,6 +57,7 @@ search -> craft -> redeem
 | ItemMetadata     | ["item_metadata", mint]          | item_nft         |
 
 MagicTokenMint тепер є default reward mint
+
 Фактичний reward mint зберігається в GameConfig.reward_token_mint і може бути замінений для тестування
 
 ## Reward Token
@@ -86,7 +87,6 @@ MagicTokenMint тепер є default reward mint
 yarn install
 anchor build
 
-
 ### 2. Start validator
 
 anchor localnet
@@ -112,14 +112,13 @@ yarn demo:flow
 ### 1. Switch cluster and fund wallet
 
 Поповнити коштами на https://faucet.solana.com/
-solana config set --url https://api.devnet.solana.com
 
+solana config set --url https://api.devnet.solana.com
 
 ### 2. Build and deploy
 
 anchor build
 anchor deploy --provider.cluster devnet
-
 
 ### 3. Bootstrap state on devnet
 
