@@ -1,0 +1,30 @@
+[package]
+name = "search"
+version = "0.1.0"
+description = "Bootstrap scaffold for the search program"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "search"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build", "resource_manager/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = { workspace = true }
+anchor-spl = { workspace = true }
+resource_manager = { path = "../resource_manager", features = ["cpi"] }
+shared = { path = "../../shared" }
+solana-sha256-hasher = "3.1.0"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

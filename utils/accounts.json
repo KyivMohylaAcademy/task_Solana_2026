@@ -1,0 +1,32 @@
+{
+  "clusterUrl": "https://api.devnet.solana.com",
+  "generatedAt": "2026-03-30T09:38:06.905Z",
+  "wallet": "6NgEyXo9zTGAYf26ZpecPvNNfmvzgkeupkWmGAVCGL8j",
+  "programIds": {
+    "resource_manager": "CwwxNgkg1s8rjRAAN9zcvLgBCBhXTvCu4L1oAupBqiTe",
+    "item_nft": "31YqF1ymwThcZTyGCmx6Uqnvjev15JRkWvMSJoxc3wve",
+    "crafting": "A14WMVRTuuS4JtVcg22BuiWHvhJx1ZhxJS5CrWfy2tHh",
+    "search": "5vrMHniMhyCnZBK5PWTMMF2w886LDc1Kd3GdN17cbPGh",
+    "marketplace": "3cPgZBSjpvcuD5FmhGQfCSBFXnz3ZMs573u8UDszgpeW",
+    "magic_token": "Bvw1CY1ZBu7jE2zmmKkWKe75LfoQvudwT11YxGYaLGW"
+  },
+  "pdas": {
+    "gameConfig": "FSV2MNwgnrrsghLG4LsJED92arMYSJxceThqLP1LNu9i",
+    "resourceManagerAuthority": "3r1vayuK4wYXCktdRuh1VxbCjpMQ3tZ57XBV1nCcwRPs",
+    "searchAuthority": "DQttMnrJVaU2Up4xCJMCtY9pYGu8gyPxxLPqW7awqPJX",
+    "craftingAuthority": "5tGWKbP3VjYVoeD3AfoaS1fiKZRvWb7mo9pjJUQQUZwT",
+    "itemNftAuthority": "GxXq2anriytgbqmMKBDsHokinKUpczRVFif9nzqeWJBe",
+    "marketplaceAuthority": "FNr6S822FS6B4MwjoXfY31PRRHi6S5J226KCU3qZbf77",
+    "magicTokenAuthority": "ARVwgXVGn1cDUyYF5cPG7JBesUs6yfsgHE8ohg49cd8Q",
+    "player": "7CbHQrZxhApPzngdtGXLShtqn76vtjaLcK5ohGFheJxh"
+  },
+  "resourceMints": {
+    "wood": "BRDZwgtTDHJ6jmd266XBAP6y7gsEBPCfKFb1oJxFznKH",
+    "iron": "2VmMKeB49w21sdZf3yS6hRatbtyqYHibqDb1u2zfuuZa",
+    "gold": "4cZ9PtGcsaMQ7mZGBHsZRDNd92WL7veq9JrEfGhA42F8",
+    "leather": "JCvceqC1wd4GQ143D7D8GQDZZ6xjSDxmKiHpbrHiikAy",
+    "stone": "E8ZS4u11SAePDfs7ontPeqCSBV9ooWYstycYTxqEKqAU",
+    "diamond": "7NWSKq9i8n2WAGuEHuxL25hE9YthkLPxnyMg8Mgvcjp8"
+  },
+  "magicTokenMint": "BHhVBy1NXvBEycARaZq9SKp47uxtGUfZB7W5j9GhdkGi"
+}

@@ -1,0 +1,9 @@
+target/
+node_modules/
+.anchor/
+.DS_Store
+.env
+*.log
+solana-test-ledger/
+.yarn/
+
