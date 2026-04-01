@@ -1,6 +1,12 @@
 [workspace]
 members = [
-    "programs/*"
+    "shared",
+    "programs/resource_manager",
+    "programs/item_nft",
+    "programs/crafting",
+    "programs/search",
+    "programs/marketplace",
+    "programs/magic_token",
 ]
 resolver = "2"
 
