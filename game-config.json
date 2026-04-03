@@ -1,0 +1,215 @@
+{
+  "game": {
+    "name": "Козацький бізнес",
+    "version": "1.0.0",
+    "description": "Solana-based game with crafting, trading, and resource management"
+  },
+  "resources": [
+    {
+      "id": 0,
+      "name": "Дерево",
+      "symbol": "WOOD",
+      "decimals": 0
+    },
+    {
+      "id": 1,
+      "name": "Залізо",
+      "symbol": "IRON",
+      "decimals": 0
+    },
+    {
+      "id": 2,
+      "name": "Золото",
+      "symbol": "GOLD",
+      "decimals": 0
+    },
+    {
+      "id": 3,
+      "name": "Шкіра",
+      "symbol": "LEATHER",
+      "decimals": 0
+    },
+    {
+      "id": 4,
+      "name": "Камінь",
+      "symbol": "STONE",
+      "decimals": 0
+    },
+    {
+      "id": 5,
+      "name": "Алмаз",
+      "symbol": "DIAMOND",
+      "decimals": 0
+    }
+  ],
+  "craftable_items": [
+    {
+      "id": 0,
+      "name": "Козацька шабля",
+      "description": "Cossack Sabre - A mighty weapon of the Kozaks",
+      "recipe": {
+        "wood": 1,
+        "iron": 3,
+        "gold": 0,
+        "leather": 1,
+        "stone": 0,
+        "diamond": 0
+      }
+    },
+    {
+      "id": 1,
+      "name": "Посох старійшини",
+      "description": "Elder's Staff - A symbol of wisdom and power",
+      "recipe": {
+        "wood": 2,
+        "iron": 0,
+        "gold": 1,
+        "leather": 0,
+        "stone": 0,
+        "diamond": 1
+      }
+    },
+    {
+      "id": 2,
+      "name": "Броня характерника",
+      "description": "Cossack Armor - Protection of the brave",
+      "recipe": {
+        "wood": 0,
+        "iron": 2,
+        "gold": 1,
+        "leather": 4,
+        "stone": 0,
+        "diamond": 0
+      }
+    },
+    {
+      "id": 3,
+      "name": "Бойовий браслет",
+      "description": "Battle Bracelet - A warrior's pride",
+      "recipe": {
+        "wood": 0,
+        "iron": 4,
+        "gold": 2,
+        "leather": 0,
+        "stone": 0,
+        "diamond": 2
+      }
+    }
+  ],
+  "game_mechanics": {
+    "search": {
+      "interval_seconds": 60,
+      "resources_per_search": 3,
+      "reward_amounts": {
+        "min": 1,
+        "max": 5
+      }
+    },
+    "marketplace": {
+      "magic_token_symbol": "MAGIC",
+      "magic_token_decimals": 6,
+      "transaction_fee": "0%"
+    }
+  },
+  "pda_seeds": {
+    "game_config": ["game_config"],
+    "player_search": ["player_search", "owner_pubkey"],
+    "item_metadata": ["item_metadata", "item_mint_pubkey"],
+    "listing": ["listing", "item_mint_pubkey"],
+    "item_nft": ["item_nft", "mint_pubkey"],
+    "magic_token_config": ["magic_token_config"]
+  },
+  "error_codes": {
+    "resource_manager": {
+      "invalid_resource_index": "InvalidResourceIndex",
+      "insufficient_resources": "InsufficientResources",
+      "unauthorized_admin": "UnauthorizedAdmin"
+    },
+    "search": {
+      "search_not_ready": "SearchNotReady",
+      "invalid_clock": "InvalidClock"
+    },
+    "crafting": {
+      "insufficient_resources": "InsufficientResources",
+      "invalid_item_type": "InvalidItemType",
+      "wrong_resource_mint": "WrongResourceMint"
+    },
+    "marketplace": {
+      "invalid_price": "InvalidPrice",
+      "insufficient_funds": "InsufficientFunds",
+      "item_not_found": "ItemNotFound"
+    },
+    "magic_token": {
+      "unauthorized_minter": "UnauthorizedMinter"
+    }
+  },
+  "example_transaction": {
+    "search_resources": {
+      "instruction": "search_resources",
+      "accounts": {
+        "player_search": "PDA: [b'player_search', owner]",
+        "owner": "Signer",
+        "clock": "SYSVAR_CLOCK_PUBKEY",
+        "system_program": "System Program"
+      },
+      "result": {
+        "event": "ResourcesSearched",
+        "resources": [0, 1, 5],
+        "timestamp": 1234567890
+      }
+    },
+    "craft_item": {
+      "instruction": "craft_item",
+      "args": {
+        "item_type": 0
+      },
+      "accounts": {
+        "item_metadata": "PDA: [b'item_metadata', item_mint]",
+        "item_mint": "Signer",
+        "owner": "Signer",
+        "token_2022_program": "Token 2022 Program",
+        "system_program": "System Program"
+      },
+      "result": {
+        "event": "ItemCrafted",
+        "item_type": 0,
+        "owner": "owner_pubkey"
+      }
+    },
+    "list_item": {
+      "instruction": "list_item",
+      "args": {
+        "price": 1000
+      },
+      "accounts": {
+        "listing": "PDA: [b'listing', item_mint]",
+        "item_mint": "Signer",
+        "seller": "Signer",
+        "system_program": "System Program"
+      },
+      "result": {
+        "event": "ItemListed",
+        "seller": "seller_pubkey",
+        "item_mint": "item_mint_pubkey",
+        "price": 1000
+      }
+    },
+    "buy_item": {
+      "instruction": "buy_item",
+      "accounts": {
+        "listing": "PDA: [b'listing', item_mint]",
+        "item_mint": "Signer",
+        "buyer": "Signer",
+        "token_2022_program": "Token 2022 Program",
+        "system_program": "System Program"
+      },
+      "result": {
+        "event": "ItemSold",
+        "seller": "seller_pubkey",
+        "buyer": "buyer_pubkey",
+        "item_mint": "item_mint_pubkey",
+        "price": 1000
+      }
+    }
+  }
+}

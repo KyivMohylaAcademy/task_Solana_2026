@@ -1,0 +1,15 @@
+[workspace]
+members = [
+    "programs/resource_manager",
+    "programs/item_nft",
+    "programs/crafting",
+    "programs/search",
+    "programs/marketplace",
+    "programs/magic_token",
+]
+resolver = "2"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
