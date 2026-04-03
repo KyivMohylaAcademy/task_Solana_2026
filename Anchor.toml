@@ -6,7 +6,12 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-task_solana_2026 = "5kmzuRxAsfP5nkezpVLF5HSdSh3ZsYV1WajcZ2z4s8YS"
+crafting = "HpszmFiwYo2K5qs2Gv5HauKSUvqPLBEXLcQUjJWFYrwE"
+item_nft = "7HRBGyd8KHHA8kUwGWZpcD3B3gvNv9mSu3gUzoGVKwsx"
+magic_token = "A9GEReews3Hp9RQsiiM3Q4Tfpvd9WKofzdgcW1zKg2Bc"
+marketplace = "CCGbViKpgMcJL7zjh6C3pSsWbHrHpJoxaB7yAJVTkqPa"
+resource_manager = "HAktvQC29ctNNZ1YHv3HTqVLGxsWE7UYLJcXBAByVGwP"
+search = "FjtELP811XhkdKm63Hs2vc35fPdmGqf51YfE2cMMysQ2"
 
 [registry]
 url = "https://api.apr.dev"
