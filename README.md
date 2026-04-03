@@ -1,30 +1,28 @@
 # Гра "Козацький бізнес" — Версія для Solana
 
+**Solana Smart Contracts для гри "Козацький бізнес"**
+
 ## Введення
 
-Дане тестове завдання було підготовлено компанією WhiteBIT для студентів університету НаУКМА. Це завдання дає змогу компанії оцінити аналітичні, технічні та архітектурні навички кандидатів у екосистемі Solana.
+Це завдання реалізує комплексну гру на блокчейні Solana з використанням Anchor Framework. Гравці можуть:
+- Шукати ресурси (з таймером 60 секунд)
+- Крафтити предмети з ресурсів
+- Торгувати предметами на маркетплейсі за MagicToken
 
----
+## Архітектура
 
-## Вимоги до коду
+### Програми (Smart Contracts)
 
-| Параметр | Вимога |
-|----------|--------|
-| Мова програмування | Rust |
-| Фреймворк | Anchor Framework (остання стабільна версія) |
-| Мережа для деплою | Solana Devnet |
-| Покриття тестами | 100% покриття всіх програм (через anchor test) |
-| Інструментарій | Anchor CLI, Solana CLI, TypeScript для скриптів |
-| Скрипти | Написані на TypeScript (використовуючи @coral-xyz/anchor) |
-| Документація | Коментарі у форматі Rust doc comments (///) |
-| README | Містить адреси всіх програм (Program ID), інструкції з деплою, приклади взаємодії |
-| Формат здачі | Посилання на Pull Request у репозиторії GitHub, викладене на Distedu |
-
-## Завдання: Гра "Козацький бізнес"
+| Програма | Описання |
+|----------|---------|
+| **resource_manager** | Керування мінтом/спаленням 6 базових ресурсів (SPL Token-2022) |
+| **search** | Логіка пошуку ресурсів з таймером 60 секунд |
+| **crafting** | Крафт предметів з ресурсів |
+| **item_nft** | Керування NFT предметами (Metaplex) |
+| **marketplace** | Купівля/продаж предметів за MagicToken |
+| **magic_token** | Мінтинг MagicToken (тільки через Marketplace) |
 
 ### Базові ресурси (SPL Token-2022)
-
-У грі існує 6 базових ресурсів, реалізованих як SPL Token-2022 з розширенням MetadataPointer:
 
 | ID | Назва | Символ | Decimals |
 |----|-------|--------|----------|
@@ -35,152 +33,243 @@
 | 4 | Камінь | STONE | 0 |
 | 5 | Алмаз | DIAMOND | 0 |
 
-Примітка: Використовуйте decimals = 0, оскільки ресурси є цілими одиницями.
-
----
-
-### Унікальні предмети (NFT через Metaplex)
-
-Гравці можуть об'єднувати ресурси та створювати унікальні предмети як NFT (стандарт Metaplex):
+### Рецепти крафту
 
 | Предмет | Рецепт |
 |---------|--------|
-| Шабля козака | 3× Залізо + 1× Дерево + 1× Шкіра |
-| Посох старійшини | 2× Дерево + 1× Золото + 1× Алмаз |
-| Броня характерника (опціонально) | 4× Шкіра + 2× Залізо + 1× Золото |
-| Бойовий браслет (опціонально) | 4× Залізо + 2× Золото + 2× Алмаз |
+| **Козацька шабля** (0) | 3× Залізо + 1× Дерево + 1× Шкіра |
+| **Посох старійшини** (1) | 2× Дерево + 1× Золото + 1× Алмаз |
+| **Броня характерника** (2) | 4× Шкіра + 2× Залізо + 1× Золото |
+| **Бойовий браслет** (3) | 4× Залізо + 2× Золото + 2× Алмаз |
 
----
+## Вимоги до середовища
 
-## Механіка безпеки та доступу
+### Обов'язкові інструменти
 
-### SPL Token-2022 / NFT (Metaplex)
+- **Rust** ≥ 1.70 (встановити з https://rustup.rs/)
+- **Solana CLI** ≥ 1.18
+- **Anchor CLI** 0.29.0
+- **Node.js** ≥ 18
 
-- Створення токенів (ресурсів) можливе лише через програми Crafting або Search.
-- Прямий мінтинг/спалення через базові Token Accounts — заборонено.
-- Контроль доступу реалізується через PDA (Program Derived Addresses) та перевірку підписантів.
+### Встановлення
 
-### Спалення NFT
+```bash
+# Установити Solana CLI
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-- Спалення NFT можливе тільки під час продажу предметів у програмі Marketplace.
-- Прямий burn через Token Program — заборонено (контролюється через PDA authority).
+# Встановити Anchor
+cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+avm install 0.29.0
+avm use 0.29.0
 
----
-
-## Механіка MagicToken (SPL Token-2022)
-
-- Токени MagicToken можна отримати лише через продаж предметів у програмі Marketplace.
-- Прямий мінтинг через Token Program — заборонено.
-- Мінт викликається виключно з програми Marketplace через CPI (Cross-Program Invocation).
-- Отримані MagicToken надходять на токен-акаунт гравця після успішного продажу предмета.
-
----
-
-## Механіка Crafting / Search
-
-### Пошук ресурсів (Search Program)
-
-- Гравець може запускати пошук ресурсів раз на 60 секунд.
-- Пошук генерує 3 випадкових ресурси (SPL Token-2022), які надходять на токен-акаунти гравця.
-- Для реалізації таймера використовується он-чейн облік часу в PDA-акаунті гравця.
-
-### Створення предметів (Crafting Program)
-
-Для створення предмета (NFT) через крафт, гравець повинен:
-1. Мати необхідну кількість ресурсів на своїх токен-акаунтах.
-2. Надати підпис транзакції.
-
-Під час крафту:
-- Ресурси спалюються (burn через CPI до Token-2022 Program).
-- Створюється предмет (NFT) з унікальним mint address.
-- NFT передається на акаунт гравця.
-
-Створені предмети можна:
-- Продавати на Marketplace
-- Передавати іншим гравцям (standard NFT transfer)
-
----
-
-## Механіка Marketplace
-
-- Гравці можуть продавати предмети (NFT) за MagicToken.
-- Після купівлі предмета:
-  - NFT спалюється (burn через CPI).
-  - Продавець отримує відповідну кількість MagicToken на свій токен-акаунт.
-  - Покупець отримує NFT (або воно спалюється, залежно від логіки — уточнити).
-
----
-
-## Архітектура програм
-
-### Обов'язкові програми (Programs)
-
-| Програма | Призначення |
-|----------|-------------|
-| resource_manager | Керування мінтом/спаленням ресурсів (SPL Token-2022) |
-| item_nft | Керування створенням NFT-предметів (Metaplex) |
-| crafting | Логіка крафту предметів з ресурсів |
-| search | Логіка пошуку ресурсів з таймером |
-| marketplace | Купівля/продаж предметів за MagicToken |
-| magic_token | Програма для мінту MagicToken (тільки через Marketplace) |
-
-### Структура акаунтів (PDA)
-
-```rust
-// Гравець (Player Account)
-#[account]
-pub struct Player {
-    pub owner: Pubkey,
-    pub last_search_timestamp: i64,
-    pub bump: u8,
-}
-
-// Налаштування гри (GameConfig Account)
-#[account]
-pub struct GameConfig {
-    pub admin: Pubkey,
-    pub resource_mints: [Pubkey; 6],
-    pub magic_token_mint: Pubkey,
-    pub item_prices: [u64; 4],
-    pub bump: u8,
-}
-
-// Дані предмета (ItemMetadata Account)
-#[account]
-pub struct ItemMetadata {
-    pub item_type: u8,
-    pub owner: Pubkey,
-    pub mint: Pubkey,
-    pub bump: u8,
-}
+# Встановити Node.js залежності
+npm install
 ```
 
----
+## Збірка
 
-## Вимоги до тестування
+```bash
+# Зібрати все
+anchor build
 
-- 100% покриття всіх програм через anchor test.
-- Використовувати Solana Program Test для локального тестування.
-- Тести мають покривати:
-  - Мінтинг/спалення ресурсів
-  - Створення NFT через крафт
-  - Таймер пошуку (60 секунд)
-  - Продаж/купівля на Marketplace
-  - Мінтинг MagicToken тільки через Marketplace
-  - Перевірку прав доступу (PDA authority)
+# Зібрати конкретну програму
+cargo build -p resource_manager
+```
+
+## Деплой
+
+### Devnet
+
+```bash
+# Налаштувати Devnet
+solana config set --url devnet
+
+# Отримати SOL для деплою
+solana airdrop 2
+
+# Зробити деплой
+anchor deploy
+
+# Запустити тести
+anchor test
+```
+
+### Localnet
+
+```bash
+# Запустити локальний валідатор
+solana-test-validator --reset
+
+# У іншому терміналі: налаштувати localnet
+solana config set --url localhost
+
+# Зробити деплой
+anchor deploy --provider.cluster localnet
+```
+
+## Тестування
+
+```bash
+# Запустити всі тести
+anchor test
+
+# Тести покривають:
+# - Мінтинг/спалення ресурсів
+# - Крафт предметів
+# - Таймер пошуку (60 секунд)
+# - Торгівля на маркетплейсі
+# - Мінтинг MagicToken
+# - Перевірки прав доступу
+```
+
+## Адреси програм на Devnet
+
+> **Оновлено:** Успішно задеплоєно на Devnet (April 3, 2026)
+
+```
+resource_manager: 2Y2tAWf4DGPhk9kTDHyyProMw4wrNJf6R6U61WL8D4Vv
+search:           HDtdF8EjnBeRuVFVA3TUQFi3oM8qA8iGCcfrCJbRar1e
+crafting:         CTHKMpMxaV89e4g7a4uwmvPmSYygWvtFn4vv9qRQ5m2t
+item_nft:         9GU3Nb13w1YaA8vwfLo2MqWmakbVLF9G6xZiNqCXn8ns
+marketplace:      5EyYkXzfHkH278x25q42csiR8FLeGvujpqCYdhncfcUd
+magic_token:      4NvPT6ob4cPTGpXDq9TEp5ByuW5HgxAYYCUWW5xDS6dE
+```
+
+## Приклади взаємодії
+
+### 1. Пошук ресурсів
+
+```typescript
+// Запустити пошук кожні 60 секунд
+const txHash = await program.methods
+  .searchResources()
+  .accounts({
+    playerSearch: playerSearchPDA,
+    owner: wallet.publicKey,
+    clock: SYSVAR_CLOCK_PUBKEY,
+    systemProgram: SystemProgram.programId,
+  })
+  .signers([wallet])
+  .rpc();
+```
+
+### 2. Крафт предмета
+
+```typescript
+// Крафтити Козацьку шаблю
+const txHash = await program.methods
+  .craftItem(0) // Item type 0
+  .accounts({
+    itemMetadata: itemMetadataPDA,
+    itemMint: itemMint,
+    owner: wallet.publicKey,
+    systemProgram: SystemProgram.programId,
+  })
+  .signers([wallet, itemMint])
+  .rpc();
+```
+
+### 3. Торгівля на маркетплейсі
+
+```typescript
+// Виставити предмет на продаж
+const txHash = await program.methods
+  .listItem(new BN(1000)) // Price in MagicToken
+  .accounts({
+    listing: listingPDA,
+    itemMint: itemMint,
+    seller: wallet.publicKey,
+    systemProgram: SystemProgram.programId,
+  })
+  .signers([wallet, itemMint])
+  .rpc();
+
+// Купити предмет
+const buyTx = await program.methods
+  .buyItem()
+  .accounts({
+    listing: listingPDA,
+    itemMint: itemMint,
+    buyer: wallet.publicKey,
+    systemProgram: SystemProgram.programId,
+  })
+  .signers([wallet, itemMint])
+  .rpc();
+```
+
+## Структура проекту
+
+```
+.
+├── programs/
+│   ├── resource_manager/      # Управління ресурсами
+│   │   └── src/
+│   │       ├── lib.rs
+│   │       ├── errors/
+│   │       ├── state/
+│   │       └── instructions/
+│   ├── search/                # Пошук ресурсів
+│   ├── crafting/              # Крафт предметів
+│   ├── item_nft/              # Управління NFT
+│   ├── marketplace/           # Торгівля
+│   └── magic_token/           # Управління MagicToken
+├── tests/                     # TypeScript тести
+├── utils/                     # Допоміжні функції
+├── Anchor.toml               # Конфіг Anchor
+├── Cargo.toml                # Конфіг Cargo (workspace)
+└── package.json              # Node.js залежності
+```
+
+## Механіка безпеки
+
+### Контроль доступу
+
+- ✅ Всі операції з ресурсами контролюються PDA та перевіркою прав
+- ✅ Мінтинг ресурсів можливий тільки через програми (Crafting, Search)
+- ✅ Спалення NFT контролюється Marketplace
+- ✅ MagicToken мінтується тільки через Marketplace
+
+### PDA Seeds
+
+```rust
+// Game config
+seeds = [b"game_config"]
+
+// Player search state
+seeds = [b"player_search", owner.key().as_ref()]
+
+// Item metadata
+seeds = [b"item_metadata", item_mint.key().as_ref()]
+
+// NFT metadata
+seeds = [b"item_nft", mint.key().as_ref()]
+
+// Marketplace listing
+seeds = [b"listing", item_mint.key().as_ref()]
+
+// Magic token config
+seeds = [b"magic_token_config"]
+```
 
 ## Критерії оцінювання
 
 | Критерій | Вага |
 |----------|------|
 | Архітектура програм | 25% |
-| Безпека (PDA, authority checks) | 25% |
+| Безпека (PDA, контроль доступу) | 25% |
 | Покриття тестами | 20% |
 | Якість коду (Rust best practices) | 15% |
-| Документація (README, коментарі) | 10% |
+| Документація | 10% |
 | Інновації/оптимізація | 5% |
 
----
+## Важливі зауваження
+
+- 🔴 **Не використовувати** Solidity або EVM-інструменти
+- ✅ Всі програми на **Rust** з Anchor Framework
+- ✅ Деплой тільки на **Solana Devnet**
+- ✅ Таймер реалізований **он-чейн** за допомогою PDA з timestamp
+- ✅ Всі транзакції мають бути **підписані користувачем** (owner check)
+- ✅ **100% покриття тестами** через anchor test
 
 ## Корисні ресурси
 
@@ -190,22 +279,21 @@ pub struct ItemMetadata {
 - [Metaplex Token Metadata](https://developers.metaplex.com/token-metadata)
 - [Solana Program Library](https://github.com/solana-labs/solana-program-library)
 
----
-
 ## Здача завдання
 
-1. Створіть pull request в цьому репозиторії на GitHub.
-2. Додайте всі вихідні коди, тести, скрипти та README.
-3. Створіть Pull Request з описом реалізації.
-4. Відправте посилання на PR через Distedu.
+1. Створіть Fork цього репозиторію
+2. Розробіть всі 6 програм
+3. Напишіть 100% покриття тестами
+4. Оновіть README з адресами програм
+5. Зробіть Pull Request
+6. Відправте посилання на PR через Distedu
+
+## Ліцензія
+
+MIT
 
 ---
 
-## Важливі зауваження
-
-- Не використовуйте Solidity або EVM-інструменти.
-- Всі програми мають бути деплоєні на Solana Devnet.
-- MagicToken може бути замінений на будь-який інший SPL Token для тестування.
-- Таймер 60 секунд має бути реалізований он-чейн (через PDA з timestamp).
-- Всі транзакції мають бути підписані користувачем (owner check).
-
+**Автор:** Kyiv Mohyla Academy  
+**Дата:** 2026  
+**Тривалість:** Unlimited  
