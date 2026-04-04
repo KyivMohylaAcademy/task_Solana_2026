@@ -2,6 +2,17 @@
 
 Solana game economy implementation (resources, crafting, marketplace, and magic token), split into six Anchor programs with CPI-based access control.
 
+## Deployed Programs (Devnet)
+
+| Program | Program ID | Explorer |
+|----------|-----------|----------|
+| resource_manager | `HAktvQC29ctNNZ1YHv3HTqVLGxsWE7UYLJcXBAByVGwP` | [Solana Explorer](https://explorer.solana.com/address/HAktvQC29ctNNZ1YHv3HTqVLGxsWE7UYLJcXBAByVGwP?cluster=devnet) |
+| magic_token | `A9GEReews3Hp9RQsiiM3Q4Tfpvd9WKofzdgcW1zKg2Bc` | [Solana Explorer](https://explorer.solana.com/address/A9GEReews3Hp9RQsiiM3Q4Tfpvd9WKofzdgcW1zKg2Bc?cluster=devnet) |
+| item_nft | `7HRBGyd8KHHA8kUwGWZpcD3B3gvNv9mSu3gUzoGVKwsx` | [Solana Explorer](https://explorer.solana.com/address/7HRBGyd8KHHA8kUwGWZpcD3B3gvNv9mSu3gUzoGVKwsx?cluster=devnet) |
+| search | `FjtELP811XhkdKm63Hs2vc35fPdmGqf51YfE2cMMysQ2` | [Solana Explorer](https://explorer.solana.com/address/FjtELP811XhkdKm63Hs2vc35fPdmGqf51YfE2cMMysQ2?cluster=devnet) |
+| crafting | `HpszmFiwYo2K5qs2Gv5HauKSUvqPLBEXLcQUjJWFYrwE` | [Solana Explorer](https://explorer.solana.com/address/HpszmFiwYo2K5qs2Gv5HauKSUvqPLBEXLcQUjJWFYrwE?cluster=devnet) |
+| marketplace | `CCGbViKpgMcJL7zjh6C3pSsWbHrHpJoxaB7yAJVTkqPa` | [Solana Explorer](https://explorer.solana.com/address/CCGbViKpgMcJL7zjh6C3pSsWbHrHpJoxaB7yAJVTkqPa?cluster=devnet) |
+
 ## Repo Structure
 
 ```text
