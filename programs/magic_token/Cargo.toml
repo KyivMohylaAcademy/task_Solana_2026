@@ -1,0 +1,29 @@
+[package]
+name = "magic_token"
+version = "0.1.0"
+description = "MagicToken mint authority restricted to marketplace CPI"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "magic_token"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = { version = "0.32.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.32.1", features = ["associated_token", "token_2022", "token_2022_extensions"] }
+game_common = { path = "../../crates/game_common" }
+resource_manager = { path = "../resource_manager", features = ["cpi"] }
+spl-pod = "0.5"
+spl-token-2022 = "8"
+spl-token-metadata-interface = "0.7"

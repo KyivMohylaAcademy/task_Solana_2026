@@ -1,0 +1,28 @@
+[package]
+name = "resource_manager"
+version = "0.1.0"
+description = "Resource mint registry and SPL Token-2022 mint authority"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "resource_manager"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = { version = "0.32.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.32.1", features = ["associated_token", "token_2022", "token_2022_extensions"] }
+game_common = { path = "../../crates/game_common" }
+spl-pod = "0.5"
+spl-token-2022 = "8"
+spl-token-metadata-interface = "0.7"

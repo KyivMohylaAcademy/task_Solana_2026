@@ -1,0 +1,27 @@
+[package]
+name = "crafting"
+version = "0.1.0"
+description = "Burns resources and mints item NFTs"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "crafting"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = { version = "0.32.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.32.1", features = ["token", "token_2022"] }
+game_common = { path = "../../crates/game_common" }
+item_nft = { path = "../item_nft", features = ["cpi"] }
+resource_manager = { path = "../resource_manager", features = ["cpi"] }
