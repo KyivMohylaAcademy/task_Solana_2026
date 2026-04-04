@@ -1,0 +1,28 @@
+[package]
+name = "item_nft"
+version = "0.1.0"
+description = "Crafted item NFTs (Token-2022 + Metaplex metadata)"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "item_nft"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = "0.32.1"
+anchor-spl = { version = "0.32.1", features = ["token", "token_2022", "associated_token"] }
+shared = { path = "../../shared" }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
