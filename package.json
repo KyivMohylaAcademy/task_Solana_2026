@@ -1,0 +1,26 @@
+{
+  "name": "task-solana-2026",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "anchor build",
+    "deploy:devnet": "tsc --rootDir scripts --outDir .anchor/script-runners --module commonjs --target ES2020 --moduleResolution node --esModuleInterop scripts/deploy_devnet.ts && node .anchor/script-runners/deploy_devnet.js",
+    "test": "tsc --rootDir scripts --outDir .anchor/test-scripts --module commonjs --target ES2020 --moduleResolution node --esModuleInterop scripts/run_localnet_tests.ts && node .anchor/test-scripts/run_localnet_tests.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "0.32.1",
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@solana/spl-token": "^0.4.14",
+    "@solana/web3.js": "^1.98.4"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.20",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.15.30",
+    "chai": "^4.5.0",
+    "mocha": "^10.8.2",
+    "ts-mocha": "^10.1.0",
+    "typescript": "^5.8.3"
+  }
+}
