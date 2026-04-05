@@ -1,0 +1,15 @@
+[package]
+name = "shared"
+version = "0.1.0"
+edition = "2021"
+description = "Shared types and bootstrap helpers for Kozatskyi Business programs"
+
+[lib]
+name = "shared"
+crate-type = ["lib"]
+
+[dependencies]
+anchor-lang = { workspace = true }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

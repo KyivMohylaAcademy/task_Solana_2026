@@ -1,0 +1,31 @@
+{
+  "name": "kozatskyi-business",
+  "private": true,
+  "scripts": {
+    "bootstrap": "ts-node scripts/bootstrap.ts",
+    "create:mints": "ts-node scripts/create-mints.ts",
+    "demo:flow": "ts-node scripts/demo-flow.ts",
+    "deploy": "anchor deploy",
+    "lint": "prettier \"**/*.{js,ts,json,md,toml}\" --check --ignore-unknown",
+    "lint:fix": "prettier \"**/*.{js,ts,json,md,toml}\" -w --ignore-unknown",
+    "test": "anchor test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "0.32.1",
+    "@solana/spl-token": "^0.4.14"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.2.0",
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.5.2",
+    "chai": "^5.2.0",
+    "mocha": "^11.2.2",
+    "prettier": "^3.5.3",
+    "ts-mocha": "^11.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "yarn@1.22.22"
+}
