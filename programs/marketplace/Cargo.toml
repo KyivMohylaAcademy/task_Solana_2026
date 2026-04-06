@@ -1,0 +1,23 @@
+[package]
+name = "marketplace"
+version = "0.1.0"
+description = "Marketplace Program for Cossack Business Game"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "marketplace"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+[dependencies]
+anchor-lang = "0.31.1"
+anchor-spl = "0.31.1"
+solana-program = "=2.1.0"
+zeroize = "=1.8.1"
