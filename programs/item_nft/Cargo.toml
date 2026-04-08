@@ -1,0 +1,24 @@
+[package]
+name = "item_nft"
+version = "0.1.0"
+description = "Item NFT — manages Metaplex NFT items for crafting"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "item_nft"
+test = false
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+[dependencies]
+anchor-lang = { version = "0.32.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.32.1", default-features = false, features = ["associated_token", "token", "token_2022"] }
+solana-program = "=2.2.1"
+mpl-token-metadata = "5"
