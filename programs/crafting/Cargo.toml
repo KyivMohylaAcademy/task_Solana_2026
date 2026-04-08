@@ -1,0 +1,26 @@
+[package]
+name = "crafting"
+version = "0.1.0"
+description = "Crafting — craft NFT items from resources"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "crafting"
+test = false
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+[dependencies]
+anchor-lang = { version = "0.32.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.32.1", default-features = false, features = ["associated_token", "token", "token_2022"] }
+solana-program = "=2.2.1"
+resource_manager = { path = "../resource_manager", features = ["cpi"] }
+item_nft = { path = "../item_nft", features = ["cpi"] }
+mpl-token-metadata = "5"

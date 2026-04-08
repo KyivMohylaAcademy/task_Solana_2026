@@ -1,0 +1,11 @@
+node_modules/
+.anchor/
+.claude/
+.tmp-devnet/
+anchor-test.log
+item_nft_tree.txt
+
+target/
+!target/deploy/
+target/deploy/*.so
+!target/deploy/*-keypair.json
