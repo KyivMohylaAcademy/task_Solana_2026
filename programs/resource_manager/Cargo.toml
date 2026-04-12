@@ -1,0 +1,21 @@
+[package]
+name = "resource_manager"
+version = "0.1.0"
+description = "Resource Manager — SPL Token-2022 mints for Kozatskyi Biznes"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "resource_manager"
+
+[features]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+no-entrypoint = []
+no-idl = []
+no-log-panics = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { workspace = true }
+anchor-spl = { workspace = true }

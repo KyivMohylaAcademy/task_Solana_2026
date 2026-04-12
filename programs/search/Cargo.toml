@@ -1,0 +1,22 @@
+[package]
+name = "search"
+version = "0.1.0"
+description = "Search — find 3 random resources every 60 seconds via on-chain timer"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "search"
+
+[features]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+no-entrypoint = []
+no-idl = []
+no-log-panics = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { workspace = true }
+anchor-spl = { workspace = true }
+resource_manager = { path = "../resource_manager", features = ["cpi"] }
