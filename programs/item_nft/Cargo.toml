@@ -1,0 +1,20 @@
+[package]
+name = "item_nft"
+version = "0.1.0"
+description = "Item NFT — creates and burns SPL Token-2022 NFT items (supply = 1)"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "item_nft"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang  = { version = "0.31.0", features = ["init-if-needed"] }
+anchor-spl   = { version = "0.31.0", features = ["token_2022"] }
