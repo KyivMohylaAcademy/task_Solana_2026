@@ -1,0 +1,22 @@
+[package]
+name = "marketplace"
+version = "0.1.0"
+description = "Marketplace — sell items for MagicToken"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "marketplace"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang   = { version = "0.31.0", features = ["init-if-needed"] }
+anchor-spl    = { version = "0.31.0", features = ["token_2022"] }
+magic_token   = { path = "../magic_token",  features = ["cpi"] }
+item_nft      = { path = "../item_nft",     features = ["cpi"] }

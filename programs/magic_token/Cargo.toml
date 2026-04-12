@@ -1,0 +1,20 @@
+[package]
+name = "magic_token"
+version = "0.1.0"
+description = "MagicToken — SPL Token-2022 mint controlled exclusively by the Marketplace program"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "magic_token"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang  = { version = "0.31.0", features = ["init-if-needed"] }
+anchor-spl   = { version = "0.31.0", features = ["token_2022"] }
