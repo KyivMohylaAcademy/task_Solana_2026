@@ -1,0 +1,21 @@
+[package]
+name = "magic_token"
+version = "0.1.0"
+description = "MagicToken — SPL Token-2022 mintable only via Marketplace CPI"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "magic_token"
+
+[features]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+no-entrypoint = []
+no-idl = []
+no-log-panics = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { workspace = true }
+anchor-spl = { workspace = true }

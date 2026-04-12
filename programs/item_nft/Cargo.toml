@@ -1,0 +1,22 @@
+[package]
+name = "item_nft"
+version = "0.1.0"
+description = "Item NFT — Metaplex NFT creation and burning for Kozatskyi Biznes"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "item_nft"
+
+[features]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+no-entrypoint = []
+no-idl = []
+no-log-panics = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { workspace = true }
+anchor-spl = { workspace = true }
+mpl-token-metadata = { workspace = true }
