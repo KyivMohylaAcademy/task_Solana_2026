@@ -1,0 +1,19 @@
+[workspace]
+members = [
+    "programs/resource_manager",
+    "programs/magic_token",
+    "programs/search",
+    "programs/item_nft",
+    "programs/crafting",
+    "programs/marketplace",
+    "crates/shared",
+]
+resolver = "2"
+
+[profile.release]
+overflow-checks = true
+lto = "thin"
+opt-level = 3
+
+[profile.dev]
+overflow-checks = true

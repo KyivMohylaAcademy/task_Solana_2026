@@ -1,0 +1,22 @@
+[package]
+name = "crafting"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "crafting"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = { version = "0.31.1", features = ["derive"] }
+anchor-spl = { version = "0.31.1", features = ["token_2022"] }
+resource_manager = { path = "../resource_manager", features = ["cpi"] }
+item_nft = { path = "../item_nft", features = ["cpi"] }
+shared = { path = "../../crates/shared" }
