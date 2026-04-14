@@ -1,0 +1,9 @@
+[package]
+name = "shared"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anchor-lang = { version = "0.31.1", features = ["derive"] }
+solana-program = "=2.1.0"
+blake3 = "=1.5.5"
