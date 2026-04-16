@@ -209,3 +209,116 @@ pub struct ItemMetadata {
 - Таймер 60 секунд має бути реалізований он-чейн (через PDA з timestamp).
 - Всі транзакції мають бути підписані користувачем (owner check).
 
+---
+
+## Implementation
+
+### Program IDs (localnet)
+
+| Program | ID |
+|---|---|
+| `resource_manager` | `AC4HSs3SakEbMAqefhDamXebxdGi3ZMktRWfyrXg22TR` |
+| `search` | `8DHJBMqyodTKcEaix734FAjsLRaMj2q1fnxSmaMVnUfV` |
+| `item_nft` | `CJi4wPcNAJmDyaJQ1ybYmF1hKP6Xtm1RT3JR9S2MbGiX` |
+| `crafting` | `6iytFXd7TuSKY1oHjBx1P7yWAw3mQodwFHnb147eyV55` |
+| `magic_token` | `7wUSeVT8HEm1JnoWnWQBEeKcH5R9sf5uA5bFdCj5JT3M` |
+| `marketplace` | `BgCMRC1AvwfXKGx7jmLMPkq7ccZLnVd7EZ78szDFQpjb` |
+
+### Implementation status
+
+| Step | Description | Status |
+|---|---|---|
+| 0–1 | Tooling, workspace scaffold | ✅ Done |
+| 2 | `GameConfig` PDA, admin init | ✅ Done |
+| 3 | 6 SPL Token-2022 resource mints with `MetadataPointer` | ✅ Done |
+| 4 | `Player` PDA, `search_resources` with 60s cooldown, gated `mint_resource` CPI | ✅ Done |
+| 5 | `item_nft` — Metaplex 1-of-1 NFTs, gated burn | ✅ Done |
+| 6 | `crafting` — burn resources, mint NFT | Pending |
+| 7 | `magic_token` + `marketplace` — sell NFT, receive MagicToken | Pending |
+| 8 | Security sweep, 100% negative-path coverage | Pending |
+| 9 | Devnet deploy | Pending |
+
+### Architecture highlights
+
+**Gated CPI security pattern** — every cross-program mint/burn is restricted to a single registered caller. The callee validates the caller by checking that an expected PDA (derived with `seeds::program = config.registered_program`) is present as a `Signer`. Since only the registered program can produce that PDA signature via `invoke_signed`, no other program or wallet can bypass the gate.
+
+```
+search  ──CPI──▶  resource_manager::mint_resource
+                  (search_authority PDA as Signer, seeds::program = game_config.search_program)
+
+marketplace ──CPI──▶  item_nft::burn_item_nft
+                      (marketplace_authority PDA as Signer, seeds::program = item_config.marketplace_program)
+```
+
+**Token standards:**
+- Resources: SPL Token-2022 with `MetadataPointer` + `TokenMetadata` extensions (name/symbol/uri on-chain, no Metaplex).
+- Item NFTs: classic SPL Token (required by Metaplex) + `create_master_edition_v3(max_supply = Some(0))` — Metaplex transfers mint authority to the edition PDA internally, making further minting impossible.
+
+**On-chain randomness:** `search_resources` uses a Knuth MMIX LCG seeded from `Clock.slot ^ Clock.unix_timestamp ^ player_pubkey ^ last_search_ts`. Sufficient for a game demo; VRF (e.g. Switchboard) recommended for any real-money mechanic.
+
+### Build & test
+
+Prerequisites: Rust, Solana CLI ≥ 2.x, Anchor CLI 1.0, Node 20+, pnpm.
+
+```bash
+cd kozak-business
+pnpm install
+anchor build
+anchor test
+```
+
+The test suite requires the Metaplex Token Metadata program binary at `tests/fixtures/mpl_token_metadata.so`. Fetch it once from devnet:
+
+```bash
+solana program dump -u devnet metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s \
+  tests/fixtures/mpl_token_metadata.so
+```
+
+### Interaction examples
+
+**Initialize the game (run once):**
+```typescript
+await resourceManagerProgram.methods
+  .initializeGameConfig()
+  .accounts({ admin: wallet.publicKey })
+  .rpc();
+
+for (let i = 0; i < 6; i++) {
+  await resourceManagerProgram.methods
+    .initializeResourceMint(i)
+    .accounts({ admin: wallet.publicKey })
+    .rpc();
+}
+```
+
+**Register programs with each other:**
+```typescript
+await resourceManagerProgram.methods
+  .setSearchProgram(searchProgram.programId)
+  .accounts({ admin: wallet.publicKey })
+  .rpc();
+
+await itemNftProgram.methods
+  .setMarketplaceProgram(marketplaceProgram.programId)
+  .accounts({ admin: wallet.publicKey })
+  .rpc();
+```
+
+**Search for resources (60s cooldown):**
+```typescript
+await searchProgram.methods
+  .searchResources()
+  .accounts({ player: playerPda, wallet: wallet.publicKey, ... })
+  .rpc();
+```
+
+**Mint an item NFT:**
+```typescript
+const mintKeypair = Keypair.generate();
+await itemNftProgram.methods
+  .mintItemNft("Kozak Sword", "KSWD", "https://example.com/kozak-sword.json")
+  .accounts({ mint: mintKeypair.publicKey, recipient: wallet.publicKey, ... })
+  .signers([mintKeypair])
+  .rpc();
+```
+
