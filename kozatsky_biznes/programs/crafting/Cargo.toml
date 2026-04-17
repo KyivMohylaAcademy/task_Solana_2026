@@ -1,0 +1,29 @@
+[package]
+name = "crafting"
+version = "0.1.0"
+description = "Crafting program for Kozatsky Biznes — craft items from resources via CPI"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "crafting"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = { version = "1.0.0", features = ["init-if-needed"] }
+anchor-spl = { version = "1.0.0", features = ["token_2022", "token_2022_extensions", "associated_token"] }
+resource_manager = { path = "../resource_manager", features = ["cpi"] }
+item_nft = { path = "../item_nft", features = ["cpi"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

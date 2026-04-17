@@ -1,0 +1,24 @@
+[toolchain]
+package_manager = "yarn"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+crafting = "9gbQXMjCev1K5GmK4SzBa52zKtXPveZQvVmaA15rvszs"
+item_nft = "7cSkPT8JwQHibWDnXCqsADcM5euk5RRSffRsz6U5QCkR"
+kozatsky_biznes = "RvLguBuLBFbCtx1q58DLgqBBq2vTnExpDjTAgibrBsC"
+magic_token = "8KkKfeEqviwfGGnz1jLF5DVvhjC8HuSoXxnWJk4MQeoj"
+marketplace = "9tTHLWqsKEiVufU7uqeAgSJmJrvXTsCkSvTKgdrb2ofX"
+resource_manager = "G2FcuoLPQ8kSTTVLmKT9HR7b23em154skEidRVwTRtc9"
+search = "8cNt5T19ynDwaV8MkTBodqWnY4HydWZu4SdKDWL6ZU5X"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/devnet.json"
+
+[scripts]
+test = "cargo test"
+
+[hooks]

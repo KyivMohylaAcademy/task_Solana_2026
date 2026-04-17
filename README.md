@@ -209,3 +209,181 @@ pub struct ItemMetadata {
 - Таймер 60 секунд має бути реалізований он-чейн (через PDA з timestamp).
 - Всі транзакції мають бути підписані користувачем (owner check).
 
+---
+
+## Реалізація
+
+### Технологічний стек
+
+| Параметр | Значення |
+|----------|---------|
+| Мова | Rust |
+| Фреймворк | Anchor Framework 1.0.0 |
+| Мережа | Solana Devnet |
+| Токен-стандарт | SPL Token-2022 (з розширеннями MetadataPointer + TokenMetadata) |
+| NFT-стандарт | Token-2022 (supply=1, decimals=0) — без Metaplex |
+| TypeScript SDK | @anchor-lang/core 1.0.0 |
+
+### Адреси програм (Program IDs) — Solana Devnet
+
+| Програма | Program ID |
+|----------|-----------|
+| resource_manager | `G2FcuoLPQ8kSTTVLmKT9HR7b23em154skEidRVwTRtc9` |
+| magic_token | `8KkKfeEqviwfGGnz1jLF5DVvhjC8HuSoXxnWJk4MQeoj` |
+| item_nft | `7cSkPT8JwQHibWDnXCqsADcM5euk5RRSffRsz6U5QCkR` |
+| search | `8cNt5T19ynDwaV8MkTBodqWnY4HydWZu4SdKDWL6ZU5X` |
+| crafting | `9gbQXMjCev1K5GmK4SzBa52zKtXPveZQvVmaA15rvszs` |
+| marketplace | `9tTHLWqsKEiVufU7uqeAgSJmJrvXTsCkSvTKgdrb2ofX` |
+
+### Архітектура безпеки
+
+Кожна CPI-програма має власний авторитет-PDA, що перевіряється програмою-одержувачем:
+
+- `search::SearchAuthority` (seeds=`["search_authority"]`) — авторизований мінтинг ресурсів
+- `crafting::CraftingAuthority` (seeds=`["crafting_authority"]`) — авторизований burn ресурсів + мінт NFT
+- `marketplace::MarketplaceAuthority` (seeds=`["marketplace_authority"]`) — авторизований burn NFT + мінт MagicToken
+
+### Рецепти крафту
+
+| Предмет | Рецепт |
+|---------|--------|
+| 0. Шабля козака | 3×IRON + 1×WOOD + 1×LEATHER |
+| 1. Посох старійшини | 2×WOOD + 1×GOLD + 1×DIAMOND |
+| 2. Броня характерника | 4×LEATHER + 2×IRON + 1×GOLD |
+| 3. Бойовий браслет | 4×IRON + 2×GOLD + 2×DIAMOND |
+
+### Ціни предметів у MagicToken
+
+| Предмет | Ціна (MagicToken) |
+|---------|-----------------|
+| Шабля козака | 10 |
+| Посох старійшини | 20 |
+| Броня характерника | 30 |
+| Бойовий браслет | 50 |
+
+---
+
+## Інструкції з деплою
+
+### Передумови
+
+```bash
+# Встановити Anchor CLI 1.0.0
+avm install 1.0.0 && avm use 1.0.0
+
+# Встановити Solana CLI >= 1.18.x
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+
+# Встановити залежності
+cd kozatsky_biznes
+yarn install
+```
+
+### Отримати SOL на Devnet
+
+```bash
+# Отримати адресу гаманця
+solana address
+
+# Запросити SOL через CLI (якщо доступно)
+solana airdrop 5 --url devnet
+
+# Або через браузер: https://faucet.solana.com
+# Вставити адресу гаманця та отримати 5 SOL
+```
+
+### Збірка та деплой
+
+```bash
+cd kozatsky_biznes
+
+# Зібрати всі 6 програм
+anchor build
+
+# Задеплоїти на Devnet
+anchor deploy --provider.cluster devnet
+
+# Ініціалізувати ігровий стан
+ANCHOR_PROVIDER_URL=https://api.devnet.solana.com \
+ANCHOR_WALLET=~/.config/solana/devnet.json \
+npx ts-node scripts/deploy.ts
+```
+
+### Запуск тестів
+
+```bash
+# Unit-тести (27 тестів, без мережі)
+cargo test -p resource_manager -p magic_token -p item_nft -p search -p crafting -p marketplace
+
+# Або через anchor
+anchor test
+```
+
+---
+
+## Приклади взаємодії
+
+### Пошук ресурсів (Search)
+
+```typescript
+import * as anchor from "@anchor-lang/core";
+import { PublicKey } from "@solana/web3.js";
+
+const provider = anchor.AnchorProvider.env();
+anchor.setProvider(provider);
+
+const SEARCH_ID = new PublicKey("8cNt5T19ynDwaV8MkTBodqWnY4HydWZu4SdKDWL6ZU5X");
+const [playerPda] = PublicKey.findProgramAddressSync(
+  [Buffer.from("player"), provider.wallet.publicKey.toBuffer()],
+  SEARCH_ID
+);
+
+// Реєстрація гравця
+await searchProgram.methods
+  .initializePlayer()
+  .accountsPartial({ player: playerPda, playerWallet: provider.wallet.publicKey })
+  .rpc();
+
+// Пошук ресурсів (1 раз на 60 секунд)
+await searchProgram.methods
+  .searchResources()
+  .accountsPartial({ player: playerPda, resourceMint: ironMintAddress, ... })
+  .rpc();
+```
+
+### Крафт предмету (Crafting)
+
+```typescript
+// Крафт Шаблі козака (item_type=0)
+// Рецепт: 3×IRON + 1×WOOD + 1×LEATHER
+const nftMint = Keypair.generate();
+await craftingProgram.methods
+  .craftItem(0)
+  .accountsPartial({
+    player: playerWallet.publicKey,
+    resourceMint0: ironMint,    // IRON ×3
+    resourceMint1: woodMint,    // WOOD ×1
+    resourceMint2: leatherMint, // LEATHER ×1
+    nftMint: nftMint.publicKey,
+    ...
+  })
+  .signers([nftMint])
+  .rpc();
+```
+
+### Продаж предмету (Marketplace)
+
+```typescript
+// Продаж Шаблі козака за 10 MagicToken
+await marketplaceProgram.methods
+  .sellItem(0) // item_type=0
+  .accountsPartial({
+    player: playerWallet.publicKey,
+    nftMint: saberNftMint,
+    magicTokenMint: magicTokenMintAddress,
+    ...
+  })
+  .rpc();
+// Гравець отримує 10 MagicToken на свій акаунт
+```
+
