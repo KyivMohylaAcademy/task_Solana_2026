@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Гра "Козацький бізнес" — Версія для Solana
 
 ## Введення
@@ -42,11 +43,69 @@
 ### Унікальні предмети (NFT через Metaplex)
 
 Гравці можуть об'єднувати ресурси та створювати унікальні предмети як NFT (стандарт Metaplex):
+=======
+# Козацький бізнес — Solana Smart Contracts
+
+Гра реалізована як набір смарт-контрактів на Solana з використанням Anchor Framework.
+
+## Program IDs (Devnet)
+
+| Програма | Program ID |
+|----------|-----------|
+| resource_manager | `C9jeF5eivo4126iDkktjdGk7MEJqNwY9V2pFXMwQYMcy` |
+| magic_token | `BQAqENU5HMGNF8Xunzbb859GCTz8v8Tuknqieqqk6ide` |
+| search_program | `7qyvBgEsWYpP5UZKhctCA2C6HuVDBFo4DJH6V2P96rPx` |
+| item_nft | `HMCgFhEqKWroNqsDNo1RmMsyR7Wky2J7CtfDQf32WHKR` |
+| crafting | `EfvmR78Gm6o8dwTpBDMicigDREQFfvPd7nmW8VknbqK3` |
+| marketplace | `FBKAbyCSWv1Vm7PVw1NRGWnfH9rpLXqJeP8rNvrRXAkf` |
+
+## Архітектура
+
+- **resource_manager** — керує 6 ресурсами (WOOD, IRON, GOLD, LEATHER, STONE, DIAMOND) як SPL Token-2022
+- **magic_token** — SPL токен винагороди, мінтується тільки через marketplace
+- **search_program** — гравець шукає ресурси раз на 60 секунд (on-chain таймер)
+- **item_nft** — керування NFT предметами (Шабля, Посох, Броня, Браслет)
+- **crafting** — крафт предметів: спалює ресурси → створює NFT
+- **marketplace** — продаж предметів за MagicToken
+
+## Встановлення
+
+```bash
+# Залежності
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+avm install latest && avm use latest
+
+# Клонування та збірка
+git clone <your-repo-url>
+cd cossack_business
+yarn install
+anchor build
+```
+
+## Деплой
+
+```bash
+solana config set --url devnet
+solana airdrop 5
+anchor deploy
+```
+
+## Тестування
+
+```bash
+anchor test
+```
+
+## Рецепти крафту
+>>>>>>> 02f203a (feat: Козацький бізнес - 6 Anchor programs on Solana Devnet)
 
 | Предмет | Рецепт |
 |---------|--------|
 | Шабля козака | 3× Залізо + 1× Дерево + 1× Шкіра |
 | Посох старійшини | 2× Дерево + 1× Золото + 1× Алмаз |
+<<<<<<< HEAD
 | Броня характерника (опціонально) | 4× Шкіра + 2× Залізо + 1× Золото |
 | Бойовий браслет (опціонально) | 4× Залізо + 2× Золото + 2× Алмаз |
 
@@ -209,3 +268,14 @@ pub struct ItemMetadata {
 - Таймер 60 секунд має бути реалізований он-чейн (через PDA з timestamp).
 - Всі транзакції мають бути підписані користувачем (owner check).
 
+=======
+| Броня характерника | 4× Шкіра + 2× Залізо + 1× Золото |
+| Бойовий браслет | 4× Залізо + 2× Золото + 2× Алмаз |
+
+## Технічний стек
+
+- Rust + Anchor Framework 1.0.0
+- SPL Token-2022
+- Solana Devnet
+- TypeScript тести
+>>>>>>> 02f203a (feat: Козацький бізнес - 6 Anchor programs on Solana Devnet)
